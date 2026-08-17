@@ -49,16 +49,18 @@ public final class PlanValidator {
 
     public ValidationReport validate(IntentTree tree) {
         List<ValidationFinding> findings = new ArrayList<>();
-        if (tree.nodeCount() > config.maxTreeNodes()) {
+        Set<String> reachable = new HashSet<>();
+        Expansion expansion = new Expansion();
+        walk(tree.root(), tree.name(), tree.subtrees(), new ArrayDeque<>(), reachable, findings,
+                expansion, 1);
+        if (expansion.nodeCount > config.maxTreeNodes()) {
             findings.add(error(FailureReason.INVALID_PLAN, tree.name(),
                     "Tree exceeds max nodes " + config.maxTreeNodes()));
         }
-        if (tree.depth() > config.maxTreeDepth()) {
+        if (expansion.maxDepth > config.maxTreeDepth()) {
             findings.add(error(FailureReason.INVALID_PLAN, tree.name(),
                     "Tree exceeds max depth " + config.maxTreeDepth()));
         }
-        Set<String> reachable = new HashSet<>();
-        walk(tree.root(), tree.name(), tree.subtrees(), new ArrayDeque<>(), reachable, findings);
         for (Map.Entry<String, IntentNode> entry : tree.subtrees().entrySet()) {
             if (!reachable.contains(entry.getKey())) {
                 findings.add(warning(FailureReason.INVALID_PLAN, entry.getKey(),
@@ -78,7 +80,13 @@ public final class PlanValidator {
             Map<String, IntentNode> subtrees,
             ArrayDeque<String> subtreeStack,
             Set<String> reachable,
-            List<ValidationFinding> findings) {
+            List<ValidationFinding> findings,
+            Expansion expansion,
+            int depth) {
+        expansion.nodeCount++;
+        if (depth > expansion.maxDepth) {
+            expansion.maxDepth = depth;
+        }
         String here = path + "/" + node.name();
         if (node.kind() == IntentNodeKind.ACTION && node.timeout().isEmpty()) {
             findings.add(error(FailureReason.MISSING_TIMEOUT, here,
@@ -99,7 +107,7 @@ public final class PlanValidator {
             findings.add(error(FailureReason.INVALID_PLAN, here,
                     node.kind() + " node '" + node.name() + "' has no children"));
         }
-        detectResourceConflicts(node, here, findings);
+        detectResourceConflicts(node, here, subtrees, subtreeStack, findings);
         if (node.kind() == IntentNodeKind.SUBTREE) {
             String subtreeName = node.subtreeName().orElse(node.name());
             reachable.add(subtreeName);
@@ -115,22 +123,27 @@ public final class PlanValidator {
                 return;
             }
             subtreeStack.addLast(subtreeName);
-            walk(target, here, subtrees, subtreeStack, reachable, findings);
+            walk(target, here, subtrees, subtreeStack, reachable, findings, expansion, depth + 1);
             subtreeStack.removeLast();
             return;
         }
         for (IntentNode child : node.children()) {
-            walk(child, here, subtrees, subtreeStack, reachable, findings);
+            walk(child, here, subtrees, subtreeStack, reachable, findings, expansion, depth + 1);
         }
     }
 
-    private void detectResourceConflicts(IntentNode node, String path, List<ValidationFinding> findings) {
+    private void detectResourceConflicts(
+            IntentNode node,
+            String path,
+            Map<String, IntentNode> subtrees,
+            ArrayDeque<String> subtreeStack,
+            List<ValidationFinding> findings) {
         if (node.kind() != IntentNodeKind.PARALLEL) {
             return;
         }
         Set<Resource> exclusive = new LinkedHashSet<>();
         for (IntentNode child : node.children()) {
-            for (Resource resource : collectExclusive(child)) {
+            for (Resource resource : collectExclusive(child, subtrees, subtreeStack)) {
                 if (!exclusive.add(resource)) {
                     findings.add(error(FailureReason.RESOURCE_CONFLICT, path,
                             "Parallel node claims exclusive resource '" + resource.name()
@@ -140,15 +153,32 @@ public final class PlanValidator {
         }
     }
 
-    private List<Resource> collectExclusive(IntentNode node) {
+    private List<Resource> collectExclusive(
+            IntentNode node,
+            Map<String, IntentNode> subtrees,
+            ArrayDeque<String> subtreeStack) {
         List<Resource> found = new ArrayList<>();
         for (Resource resource : node.resources()) {
             if (resource.exclusive()) {
                 found.add(resource);
             }
         }
+        if (node.kind() == IntentNodeKind.SUBTREE) {
+            String subtreeName = node.subtreeName().orElse(node.name());
+            if (subtreeStack.contains(subtreeName)) {
+                return found;
+            }
+            IntentNode target = subtrees.get(subtreeName);
+            if (target == null) {
+                return found;
+            }
+            subtreeStack.addLast(subtreeName);
+            found.addAll(collectExclusive(target, subtrees, subtreeStack));
+            subtreeStack.removeLast();
+            return found;
+        }
         for (IntentNode child : node.children()) {
-            found.addAll(collectExclusive(child));
+            found.addAll(collectExclusive(child, subtrees, subtreeStack));
         }
         return found;
     }
@@ -186,5 +216,10 @@ public final class PlanValidator {
 
     private static ValidationFinding warning(FailureReason reason, String path, String message) {
         return new ValidationFinding(ValidationSeverity.WARNING, reason, path, message);
+    }
+
+    private static final class Expansion {
+        private int nodeCount;
+        private int maxDepth;
     }
 }

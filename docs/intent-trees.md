@@ -45,7 +45,7 @@ IntentTree.named("SimpleAutonomous").fallback(
 ## This scaffold
 
 - Trees can be built with the student API (`IntentTree.named(...).fallback(...)`).
-- `PlanValidator` rejects missing timeouts, unbounded/missing retry policy, missing safe terminals, cyclic subtrees, exclusive resource conflicts in parallel, empty control nodes, and oversize trees.
+- `PlanValidator` rejects missing timeouts, unbounded/missing retry policy, missing safe terminals, cyclic subtrees, exclusive resource conflicts in parallel, empty control nodes, and oversize trees. Node and depth limits, and parallel exclusive-resource checks, apply to the reachable expanded tree (named subtree targets followed from the root). Unreachable named subtrees are warnings and are not counted toward live limits.
 - `SimulatedTreeWalker` ticks trees against in-memory leaves for unit tests.
 - **No** Pedro/MIMIC adapter is invoked. **No** execute mode can produce physical output.
 

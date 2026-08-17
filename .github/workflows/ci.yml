@@ -62,3 +62,5 @@ jobs:
           test -f docs/research/build-vs-adopt.md
           test -f docs/research/team-code-case-studies.md
           test -f docs/adr/0015-authority-gates.md
+          test -f docs/audits/initial-deep-audit.md
+          test -f docs/priority-ledger.md

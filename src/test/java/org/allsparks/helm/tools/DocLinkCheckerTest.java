@@ -41,7 +41,9 @@ class DocLinkCheckerTest {
                 "docs/research/build-vs-adopt.md",
                 "docs/research/team-code-case-studies.md",
                 "docs/adr/0001-build-versus-adopt.md",
-                "docs/adr/0015-authority-gates.md"
+                "docs/adr/0015-authority-gates.md",
+                "docs/audits/initial-deep-audit.md",
+                "docs/priority-ledger.md"
         );
         Path root = Path.of("").toAbsolutePath();
         if (!Files.exists(root.resolve("README.md"))) {

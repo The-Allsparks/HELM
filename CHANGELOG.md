@@ -25,3 +25,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replay cannot create physical outputs.
 - Intent-tree safe terminals are an explicit `safeTerminal` mark in last-child fallback/recovery position. Name substrings such as `park` / `safe` / `hold` are not treated as safety proofs. Trees that relied on `ParkSafely` by name must call `IntentNode.safeTerminal(...)` (SNAPSHOT break; no release yet).
 - `PlanValidator` applies `maxTreeNodes` / `maxTreeDepth` and parallel exclusive-resource checks to reachable expanded subtrees. Unreachable named subtrees remain warnings and are not counted toward live limits (SNAPSHOT stricter validation).
+- Skipped validation reports `NOT_RUN` status; `ValidationReport.isValid()` is false unless validation actually ran and found no errors. Empty skipped reports are no longer treated as valid (SNAPSHOT behavioral break).

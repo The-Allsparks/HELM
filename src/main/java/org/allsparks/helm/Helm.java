@@ -143,7 +143,7 @@ public final class Helm {
         Objects.requireNonNull(task, "task");
         if (config.mode() == HelmMode.OFF || !config.flags().isPhase2Validate()
                 || !config.mode().allowsValidation()) {
-            return new ValidationReport(task.name(), List.of());
+            return ValidationReport.notRun(task.name(), validationSkipReason());
         }
         ValidationReport report = validator.validate(task);
         config.traceSink().record(new TraceEvent(
@@ -162,7 +162,7 @@ public final class Helm {
         Objects.requireNonNull(tree, "tree");
         if (config.mode() == HelmMode.OFF || !config.flags().isPhase2Validate()
                 || !config.mode().allowsValidation()) {
-            return new ValidationReport(tree.name(), List.of());
+            return ValidationReport.notRun(tree.name(), validationSkipReason());
         }
         ValidationReport report = validator.validate(tree);
         config.traceSink().record(new TraceEvent(
@@ -194,5 +194,15 @@ public final class Helm {
             evaluations.add(evaluate(task, snapshot));
         }
         return List.copyOf(evaluations);
+    }
+
+    private String validationSkipReason() {
+        if (config.mode() == HelmMode.OFF) {
+            return "HELM mode is OFF";
+        }
+        if (!config.flags().isPhase2Validate()) {
+            return "Phase 2 validation is not enabled";
+        }
+        return "Mode " + config.mode() + " does not allow validation";
     }
 }

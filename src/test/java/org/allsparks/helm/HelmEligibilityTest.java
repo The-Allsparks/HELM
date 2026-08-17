@@ -17,6 +17,7 @@ import org.allsparks.helm.confidence.Confidence;
 import org.allsparks.helm.confidence.ConfidenceDimension;
 import org.allsparks.helm.confidence.ConfidenceRequirement;
 import org.allsparks.helm.goal.Goal;
+import org.allsparks.helm.intent.IntentNode;
 import org.allsparks.helm.intent.IntentTree;
 import org.allsparks.helm.outcome.FailureReason;
 import org.allsparks.helm.resource.Resource;
@@ -212,14 +213,15 @@ class HelmEligibilityTest {
                 .precondition(Condition.snapshotFact("PreflightReady"))
                 .build();
         IntentTree autonomous = IntentTree.named("SimpleAutonomous")
-                .sequence(
-                        IntentTree.condition("PreflightReady"),
-                        IntentTree.action("ScorePreload"),
-                        IntentTree.fallback(
-                                IntentTree.action("AcquireNearestPiece"),
-                                IntentTree.action("ParkSafely")
-                        )
-                );
+                .fallback(
+                        IntentTree.sequence(
+                                IntentTree.condition("PreflightReady"),
+                                IntentTree.action("ScorePreload"),
+                                IntentTree.action("AcquireNearestPiece")),
+                        IntentNode.timeout(
+                                "parkTimeout",
+                                Duration.ofSeconds(3),
+                                IntentTree.safeTerminal("ParkSafely")));
         RecordingTraceSink trace = new RecordingTraceSink();
         Helm helm = Helm.create(HelmConfig.builder()
                 .mode(HelmMode.VALIDATE)

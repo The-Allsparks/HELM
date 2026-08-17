@@ -7,6 +7,7 @@
 | `STALE_INPUT` | Snapshot older than max age, or timestamps misaligned | Check clocks and alignment window |
 | `CAPABILITY_UNKNOWN` | BEACON/MIMIC did not report the capability | Leave the task blocked; do not invent AVAILABLE |
 | Validation empty and “valid” | Phase 2 flag off or mode OFF | Enable `HelmFeatureFlags.validate()` and `VALIDATE` |
+| Tree invalid despite a `ParkSafely` name | Name is not a safety proof | Mark `IntentNode.safeTerminal(...)` and put it last on a root fallback/recovery (typically inside `IntentNode.timeout(...)`). Each ACTION still needs its own timeout. |
 | `observe` returns empty | Phase 1 off or mode OFF | Enable observe flags |
 | Recommend disabled | Phase 4 not implemented | Expected |
 | Robot moved | Not HELM | HELM has no hardware output; debug the OpMode / Pedro / MIMIC |

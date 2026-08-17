@@ -19,13 +19,19 @@ Task scoreTask = Task.builder("ScorePreload")
     .build();
 
 IntentTree autonomous = IntentTree.named("SimpleAutonomous")
-    .sequence(
-        IntentTree.condition("PreflightReady"),
-        IntentTree.action("ScorePreload"),
-        IntentTree.fallback(
-            IntentTree.action("AcquireNearestPiece"),
-            IntentTree.action("ParkSafely")
-        )
+    .fallback(
+        IntentTree.sequence(
+            IntentTree.condition("PreflightReady"),
+            IntentTree.action("ScorePreload"),
+            IntentTree.action("AcquireNearestPiece")
+        ),
+        IntentNode.timeout(
+            "parkTimeout",
+            Duration.ofSeconds(3),
+            IntentNode.builder("ParkSafely", IntentNodeKind.ACTION)
+                .safeTerminal(true)
+                .timeout(TimeoutPolicy.ofSeconds(3))
+                .build())
     );
 
 TaskEvaluation evaluation = helm.evaluate(scoreTask, worldSnapshot);

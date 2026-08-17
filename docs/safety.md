@@ -6,7 +6,7 @@ HELM must:
 - Respect lower-layer safety restrictions
 - Support immediate cancellation (simulated walker; live executor not approved)
 - Use bounded retries and explicit timeouts
-- Require safe terminal behavior on validated trees
+- Require an explicit safe-terminal mark (`IntentNode.safeTerminal(...)`) in last-child fallback/recovery position on validated trees. Action names are not interpreted. Phase 2 validation is not a substitute for MIMIC, BEACON, or hardware interlocks.
 - Prevent conflicting exclusive resource claims in parallel nodes
 - Detect stale inputs
 - Preserve an operator disable path

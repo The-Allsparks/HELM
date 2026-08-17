@@ -24,6 +24,7 @@ public final class IntentNode {
     private final List<Resource> resources;
     private final Optional<String> subtreeName;
     private final Optional<Duration> waitDuration;
+    private final boolean safeTerminal;
 
     private IntentNode(Builder builder) {
         this.name = requireText(builder.name, "name");
@@ -34,10 +35,19 @@ public final class IntentNode {
         this.resources = Collections.unmodifiableList(List.copyOf(builder.resources));
         this.subtreeName = Optional.ofNullable(builder.subtreeName).filter(s -> !s.isBlank());
         this.waitDuration = Optional.ofNullable(builder.waitDuration);
+        this.safeTerminal = builder.safeTerminal;
     }
 
     public static IntentNode action(String name) {
         return builder(name, IntentNodeKind.ACTION).build();
+    }
+
+    /**
+     * ACTION node explicitly marked as a plan-level safe terminal. The name is
+     * a label only; validation does not interpret season-specific vocabulary.
+     */
+    public static IntentNode safeTerminal(String name) {
+        return builder(name, IntentNodeKind.ACTION).safeTerminal(true).build();
     }
 
     public static IntentNode condition(String name) {
@@ -148,6 +158,10 @@ public final class IntentNode {
         return waitDuration;
     }
 
+    public boolean isSafeTerminal() {
+        return safeTerminal;
+    }
+
     public boolean isLeaf() {
         return children.isEmpty();
     }
@@ -170,6 +184,7 @@ public final class IntentNode {
         private final List<Resource> resources = new ArrayList<>();
         private String subtreeName;
         private Duration waitDuration;
+        private boolean safeTerminal;
 
         private Builder(String name, IntentNodeKind kind) {
             this.name = name;
@@ -213,7 +228,15 @@ public final class IntentNode {
             return this;
         }
 
+        public Builder safeTerminal(boolean safeTerminal) {
+            this.safeTerminal = safeTerminal;
+            return this;
+        }
+
         public IntentNode build() {
+            if (safeTerminal && kind != IntentNodeKind.ACTION) {
+                throw new IllegalArgumentException("safeTerminal is only valid on ACTION nodes");
+            }
             return new IntentNode(this);
         }
     }

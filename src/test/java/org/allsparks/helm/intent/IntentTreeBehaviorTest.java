@@ -140,7 +140,7 @@ class IntentTreeBehaviorTest {
         IntentTree conflict = IntentTree.named("conflict")
                 .root(IntentNode.fallback(
                         IntentNode.parallel("both", left, right),
-                        IntentNode.action("ParkSafely")));
+                        IntentNode.safeTerminal("ParkSafely")));
         assertTrue(validator.validate(conflict).explanation().contains("exclusive resource"));
     }
 

@@ -42,6 +42,10 @@ public final class IntentTree {
         return IntentNode.action(name);
     }
 
+    public static IntentNode safeTerminal(String name) {
+        return IntentNode.safeTerminal(name);
+    }
+
     public static IntentNode condition(String name) {
         return IntentNode.condition(name);
     }

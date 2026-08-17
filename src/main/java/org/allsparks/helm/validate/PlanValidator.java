@@ -67,7 +67,7 @@ public final class PlanValidator {
         }
         if (!hasSafeTerminal(tree.root())) {
             findings.add(error(FailureReason.MISSING_FALLBACK, tree.name(),
-                    "Plan has no safe terminal action such as a named park/hold fallback"));
+                    "Plan has no safe terminal in a structurally terminal fallback or recovery position"));
         }
         return new ValidationReport(tree.name(), findings);
     }
@@ -154,21 +154,28 @@ public final class PlanValidator {
     }
 
     private boolean hasSafeTerminal(IntentNode node) {
-        String lower = node.name().toLowerCase();
-        if (node.kind() == IntentNodeKind.ACTION
-                && (lower.contains("park") || lower.contains("safe") || lower.contains("hold"))) {
-            return true;
+        return isSafeTerminalPosition(node, false);
+    }
+
+    private boolean isSafeTerminalPosition(IntentNode node, boolean insideFallbackOrRecovery) {
+        if (node.kind() == IntentNodeKind.ACTION) {
+            return insideFallbackOrRecovery && node.isSafeTerminal();
         }
         if (node.kind() == IntentNodeKind.FALLBACK || node.kind() == IntentNodeKind.RECOVERY) {
             List<IntentNode> children = node.children();
-            if (!children.isEmpty() && hasSafeTerminal(children.get(children.size() - 1))) {
-                return true;
-            }
+            return !children.isEmpty()
+                    && isSafeTerminalPosition(children.get(children.size() - 1), true);
         }
-        for (IntentNode child : node.children()) {
-            if (hasSafeTerminal(child)) {
-                return true;
-            }
+        if (node.kind() == IntentNodeKind.TIMEOUT
+                || node.kind() == IntentNodeKind.RETRY
+                || node.kind() == IntentNodeKind.DECORATOR) {
+            return node.children().size() == 1
+                    && isSafeTerminalPosition(node.children().get(0), insideFallbackOrRecovery);
+        }
+        if (node.kind() == IntentNodeKind.GUARD) {
+            List<IntentNode> children = node.children();
+            return children.size() >= 2
+                    && isSafeTerminalPosition(children.get(children.size() - 1), insideFallbackOrRecovery);
         }
         return false;
     }

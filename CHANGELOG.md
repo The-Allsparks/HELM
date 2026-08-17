@@ -23,3 +23,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - HELM does not command motors or servos.
 - Unknown and stale inputs are not converted to booleans.
 - Replay cannot create physical outputs.
+- Intent-tree safe terminals are an explicit `safeTerminal` mark in last-child fallback/recovery position. Name substrings such as `park` / `safe` / `hold` are not treated as safety proofs. Trees that relied on `ParkSafely` by name must call `IntentNode.safeTerminal(...)` (SNAPSHOT break; no release yet).

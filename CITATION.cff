@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+title: "HELM: High-level Execution and Logic Manager for FTC"
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+authors:
+  - name: "The Allsparks"
+    alias: "FTC Team 36117"
+    website: "https://github.com/The-Allsparks"
+repository-code: "https://github.com/The-Allsparks/HELM"
+url: "https://github.com/The-Allsparks/HELM"
+abstract: >-
+  HELM is a phased high-level execution and logic manager for FIRST Tech
+  Challenge robots. It begins with explainable task vocabulary, passive
+  observation, and offline plan validation. Execution authority remains
+  disabled until lower-layer dependencies and approval gates are met.
+keywords:
+  - FIRST Tech Challenge
+  - FTC
+  - behavior coordination
+  - task validation
+  - intent trees
+  - robotics
+license: MIT
+version: "0.1.0-SNAPSHOT"
+date-released: "2026-08-17"

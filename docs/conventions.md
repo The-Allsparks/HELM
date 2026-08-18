@@ -33,7 +33,8 @@ Recorded 2026-08-17 against issue [#22](https://github.com/The-Allsparks/HELM/is
 
 - **Gradle wrapper 8.7 → 9.x:** close. Gradle 9 is a major with breaking defaults; AMPER/MIMIC remain on 8.7. Java 11 source is unchanged, but a HELM-only Gradle 9 jump desyncs student setup from the rest of the org. Revisit only with a dated org-wide toolchain RFC.
 - **JUnit BOM 5.10.x → 6.x:** close. Test-only, so FTC Android runtime is unaffected, but JUnit 6 is not the Allsparks test convention. Accept 5.x patch/minor when offered.
-- **`actions/checkout` v4 → v7 and `actions/setup-java` v4 → v5:** wait. Do not merge floating major tags. A later PR may SHA-pin the current v4 line with version comments (F-DEP-002). Jumping majors without pins does not fix the supply-chain issue.
+- **`actions/checkout` v4 → v7 and `actions/setup-java` v4 → v5:** do not merge floating major tags. CI pins full commit SHAs of the v4 line (`checkout` v4.4.0, `setup-java` v4.9.1) with version comments (F-DEP-002, #41). `setup-java` v4.9.1 is the last v4 release and is deprecated; a SHA-pinned v5 bump is a later reviewed PR.
+- Dependabot majors for those two Actions are ignored. Minor/patch SHA updates within v4 remain allowed.
 - Do not combine a major bump with feature work.
 
 ## Intentional HELM deviations

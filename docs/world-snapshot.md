@@ -21,7 +21,13 @@ Unrelated timestamps are not combined without checking age and spread. If source
 
 ## Freshness
 
-`HelmConfig.snapshotMaxAge` (default 100 ms) compares snapshot time to `HelmClock`. Stale snapshots fail eligibility with `STALE_INPUT`.
+`HelmConfig.snapshotMaxAge` (default 100 ms) compares snapshot time to `HelmClock`. A snapshot is fresh only when its timestamp is **not after** the clock and its age is within the max age:
+
+```text
+0 <= (nowNanos - timestampNanos) <= snapshotMaxAge
+```
+
+A future-dated snapshot (`timestampNanos > nowNanos`) is **not** treated as fresh. Stale or future snapshots fail eligibility with `STALE_INPUT`. There is no skew budget in this scaffold.
 
 ## Mutation
 

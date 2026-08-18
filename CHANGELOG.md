@@ -27,3 +27,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PlanValidator` applies `maxTreeNodes` / `maxTreeDepth` and parallel exclusive-resource checks to reachable expanded subtrees. Unreachable named subtrees remain warnings and are not counted toward live limits (SNAPSHOT stricter validation).
 - Skipped validation reports `NOT_RUN` status; `ValidationReport.isValid()` is false unless validation actually ran and found no errors. Empty skipped reports are no longer treated as valid (SNAPSHOT behavioral break).
 - `SimulatedTreeWalker` resolves named `IntentTree.subtrees()` with a cyclic-reference guard. Missing or cyclic subtrees are `UNAVAILABLE`, never success. Desktop simulation only; still no hardware adapters.
+- Future-dated world snapshots (`timestampNanos` after `HelmClock`) are not fresh and fail eligibility with `STALE_INPUT`. There is no clock-skew budget (SNAPSHOT stricter validation).

@@ -1,6 +1,7 @@
 package org.allsparks.helm.snapshot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,5 +34,8 @@ class WorldSnapshotImmutabilityTest {
         assertNotSame(snapshot, copy);
         assertEquals("copy", copy.snapshotId());
         assertTrue(snapshot.isFresh(10L, 1_000_000L));
+        assertTrue(snapshot.isFresh(10L + 1_000_000L, 1_000_000L));
+        assertFalse(snapshot.isFresh(10L + 1_000_001L, 1_000_000L));
+        assertFalse(snapshot.isFresh(9L, 1_000_000L));
     }
 }

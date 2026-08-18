@@ -160,6 +160,17 @@ class HelmEligibilityTest {
     }
 
     @Test
+    void futureDatedSnapshotIsNotFresh() {
+        WorldSnapshot snapshot = readySnapshot().toBuilder()
+                .timestampNanos(Duration.ofSeconds(1).toNanos())
+                .build();
+        assertFalse(snapshot.isFresh(clock.nanoTime(), Duration.ofMillis(100).toNanos()));
+        TaskEvaluation evaluation = Helm.create(HelmConfig.forTests(clock)).evaluate(sampleTask(), snapshot);
+        assertFalse(evaluation.isEligible());
+        assertTrue(evaluation.rejectionReasons().contains(FailureReason.STALE_INPUT));
+    }
+
+    @Test
     void remainingTimeUnknownIsNotInfinite() {
         Task task = Task.builder("ScorePreload")
                 .requires(Capability.DRIVE_TRANSLATION)

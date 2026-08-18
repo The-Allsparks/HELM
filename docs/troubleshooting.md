@@ -4,7 +4,7 @@
 |---------|--------------|------------|
 | `evaluate` always ineligible | Mode is `OFF` | Expected default. Use `VALIDATE` in desktop tests only |
 | `UNKNOWN_CONDITION` | Fact missing from snapshot | Put the named condition in the snapshot; do not default it to false |
-| `STALE_INPUT` | Snapshot older than max age, or timestamps misaligned | Check clocks and alignment window |
+| `STALE_INPUT` | Snapshot older than max age, future-dated vs `HelmClock`, or timestamps misaligned | Use one clock; do not set snapshot time in the future; check alignment window |
 | `CAPABILITY_UNKNOWN` | BEACON/MIMIC did not report the capability | Leave the task blocked; do not invent AVAILABLE |
 | `validate` returns not run / `isValid()` false with empty findings | Phase 2 flag off or mode OFF | Enable `HelmFeatureFlags.validate()` and set mode to `VALIDATE`; check `ValidationReport.status()` |
 | Tree invalid despite a `ParkSafely` name | Name is not a safety proof | Mark `IntentNode.safeTerminal(...)` and put it last on a root fallback/recovery (typically inside `IntentNode.timeout(...)`). Each ACTION still needs its own timeout. |

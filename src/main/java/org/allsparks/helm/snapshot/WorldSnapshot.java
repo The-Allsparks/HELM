@@ -201,6 +201,12 @@ public final class WorldSnapshot {
     }
 
     public boolean isFresh(long nowNanos, long maxAgeNanos) {
+        if (maxAgeNanos < 0L) {
+            return false;
+        }
+        if (timestampNanos > nowNanos) {
+            return false;
+        }
         return nowNanos - timestampNanos <= maxAgeNanos;
     }
 

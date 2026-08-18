@@ -34,4 +34,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - README Phase 0 student snippet includes a completion condition so it matches `PlanValidator`.
-- Dependabot ignores Gradle wrapper and JUnit BOM **major** upgrades so they stay on the Allsparks Gradle 8.7 / JUnit 5 convention. GitHub Actions major bumps remain open for SHA-pin follow-up, not merge.
+- Dependabot ignores Gradle wrapper and JUnit BOM **major** upgrades so they stay on the Allsparks Gradle 8.7 / JUnit 5 convention.
+- CI pins `actions/checkout` v4.4.0 and `actions/setup-java` v4.9.1 by full commit SHA. Action major bumps are ignored.

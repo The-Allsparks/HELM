@@ -110,12 +110,15 @@ Task scoreTask = Task.builder("ScorePreload")
     .requires(Capability.LOW_SCORING)
     .timeout(Duration.ofSeconds(6))
     .fallback("ParkSafely")
+    .completion(Condition.snapshotFact("preloadScored"))
     .build();
 
 TaskEvaluation evaluation = helm.evaluate(scoreTask, worldSnapshot);
 telemetry.addData("Eligible", evaluation.isEligible());
 telemetry.addData("Reason", evaluation.explanation());
 ```
+
+Phase 2 validation also requires a timeout, a fallback name, and a completion condition. Eligibility can pass without the completion condition; `Helm.validate` will not.
 
 HELM remains `OFF` unless the robot application sets a mode. Installing this library does nothing by itself.
 

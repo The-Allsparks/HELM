@@ -36,3 +36,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README Phase 0 student snippet includes a completion condition so it matches `PlanValidator`.
 - Dependabot ignores Gradle wrapper and JUnit BOM **major** upgrades so they stay on the Allsparks Gradle 8.7 / JUnit 5 convention.
 - CI pins `actions/checkout` v4.4.0 and `actions/setup-java` v4.9.1 by full commit SHA. Action major bumps are ignored.
+- JUnit BOM 5.14.4 with an explicit `junit-platform-launcher` on the test runtime classpath so Gradle 8.7 does not use its bundled launcher (5.12+ otherwise fails every test).

@@ -1,5 +1,6 @@
 package org.allsparks.helm.sim;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,6 +21,8 @@ public final class SimulatedTreeWalker {
     private final HelmClock clock;
     private final SimulatedWorld world;
     private final Map<IntentNode, NodeState> states = new LinkedHashMap<>();
+    private final ArrayDeque<String> subtreeStack = new ArrayDeque<>();
+    private Map<String, IntentNode> subtrees = Map.of();
     private boolean cancelled;
     private boolean preempted;
 
@@ -35,7 +38,14 @@ public final class SimulatedTreeWalker {
         if (preempted) {
             return IntentStatus.PREEMPTED;
         }
-        return tickNode(tree.root());
+        this.subtrees = tree.subtrees();
+        subtreeStack.clear();
+        try {
+            return tickNode(tree.root());
+        } finally {
+            this.subtrees = Map.of();
+            subtreeStack.clear();
+        }
     }
 
     public void cancel() {
@@ -100,13 +110,40 @@ public final class SimulatedTreeWalker {
             case RECOVERY:
                 return tickFallback(node, state);
             case DECORATOR:
+                return tickDecorator(node);
             case SUBTREE:
-                if (node.children().isEmpty()) {
-                    return remember(node, IntentStatus.UNAVAILABLE);
-                }
-                return remember(node, tickNode(node.children().get(0)));
+                return tickSubtree(node);
             default:
                 return remember(node, IntentStatus.UNAVAILABLE);
+        }
+    }
+
+    private IntentStatus tickDecorator(IntentNode node) {
+        if (node.children().isEmpty()) {
+            return remember(node, IntentStatus.UNAVAILABLE);
+        }
+        return remember(node, tickNode(node.children().get(0)));
+    }
+
+    /**
+     * Resolves {@code IntentTree.subtrees()} the same way {@code PlanValidator}
+     * does. Missing or cyclic named subtrees are {@link IntentStatus#UNAVAILABLE},
+     * never success. This walker still never calls hardware adapters.
+     */
+    private IntentStatus tickSubtree(IntentNode node) {
+        String subtreeName = node.subtreeName().orElse(node.name());
+        if (subtreeStack.contains(subtreeName)) {
+            return remember(node, IntentStatus.UNAVAILABLE);
+        }
+        IntentNode target = subtrees.get(subtreeName);
+        if (target == null) {
+            return remember(node, IntentStatus.UNAVAILABLE);
+        }
+        subtreeStack.addLast(subtreeName);
+        try {
+            return remember(node, tickNode(target));
+        } finally {
+            subtreeStack.removeLast();
         }
     }
 

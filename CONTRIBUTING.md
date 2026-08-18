@@ -10,6 +10,8 @@ cd HELM
 .\gradlew.bat test
 ```
 
+The CI-compiled Phase 0 student example is `src/test/java/org/allsparks/helm/examples/Phase0DescribeExampleTest.java`. See [examples/README.md](examples/README.md).
+
 ## Rules of engagement
 
 1. **Do not enable robot execution** in pull requests. Phase 3+ requires an explicit approval gate.

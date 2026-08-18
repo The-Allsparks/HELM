@@ -2,40 +2,27 @@
 
 These sketches show the Phase 0–2 student API. They are **not** robot OpModes and they do **not** command hardware.
 
-See unit tests:
+## Compilable path (CI)
+
+Open and run this test class. `./gradlew check` compiles and executes it on Ubuntu and Windows:
+
+- [`src/test/java/org/allsparks/helm/examples/Phase0DescribeExampleTest.java`](../src/test/java/org/allsparks/helm/examples/Phase0DescribeExampleTest.java)
+
+```powershell
+.\gradlew.bat test --tests org.allsparks.helm.examples.Phase0DescribeExampleTest
+```
+
+On Linux/macOS:
+
+```bash
+./gradlew test --tests org.allsparks.helm.examples.Phase0DescribeExampleTest
+```
+
+That file is the source of truth for the student API sketch (goal, task with completion, intent tree with timed actions and an explicit `safeTerminal`, desktop evaluation, and validation). Phase 2 rejects ACTION nodes that have no timeout. Do not copy a second sketch here — it will drift.
+
+Related tests (behavior, not the student example):
 
 - `org.allsparks.helm.HelmEligibilityTest#studentApiExampleCompilesAndEvaluates`
 - `org.allsparks.helm.intent.IntentTreeBehaviorTest`
 
-```java
-Goal scorePreload = Goal.named("ScorePreload");
-
-Task scoreTask = Task.builder("ScorePreload")
-    .requires(Capability.DRIVE_TRANSLATION)
-    .requires(Capability.LOW_SCORING)
-    .timeout(Duration.ofSeconds(6))
-    .fallback("ParkSafely")
-    .completion(Condition.snapshotFact("preloadScored"))
-    .build();
-
-IntentTree autonomous = IntentTree.named("SimpleAutonomous")
-    .fallback(
-        IntentTree.sequence(
-            IntentTree.condition("PreflightReady"),
-            IntentTree.action("ScorePreload"),
-            IntentTree.action("AcquireNearestPiece")
-        ),
-        IntentNode.timeout(
-            "parkTimeout",
-            Duration.ofSeconds(3),
-            IntentNode.builder("ParkSafely", IntentNodeKind.ACTION)
-                .safeTerminal(true)
-                .timeout(TimeoutPolicy.ofSeconds(3))
-                .build())
-    );
-
-TaskEvaluation evaluation = helm.evaluate(scoreTask, worldSnapshot);
-DecisionRecord recommendation = helm.recommend(List.of(scoreTask), worldSnapshot);
-```
-
-`recommendation` explains that shadow selection is not enabled. Default `Helm.create()` is mode `OFF`.
+Default `Helm.create()` is mode `OFF` and `allowsPhysicalOutput()` is always false in this scaffold.

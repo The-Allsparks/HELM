@@ -24,3 +24,17 @@ Rules:
 Worst-case evaluation cost is linear in required capabilities, confidence dimensions, preconditions, and resource checks for a single task. Desktop unit tests measure completeness under a jumping clock; they are **not** Control Hub timings.
 
 **Hardware performance measurements: none.** Do not claim Control Hub budgets are proven.
+
+## Desktop characterization (2026-08-17)
+
+Verified fact from unit tests on a development JVM. **Not** Control Hub, **not** FTC Android, **not** a 5 ms proof.
+
+| Observation | Evidence | What it is not |
+|-------------|----------|----------------|
+| `TaskEvaluation.evaluationNanos()` is `0` when `ManualClock` does not advance | `DesktopPerformanceCharacterizationTest` | Not “evaluation is free” or “under 5 ms on the robot” |
+| If the configured clock delta exceeds `decisionTimeBudget` (5 ms), evaluation is **incomplete** and `TIME_BUDGET_EXCEEDED` | `DeterminismAndReplayTest.exceedingDecisionBudgetMarksEvaluationIncomplete` | Not a wall-clock benchmark; CI does not assert real elapsed time |
+| Allocation / GC pressure | Not measured | Do not start “make it faster” work from this table |
+
+The 5 ms figure in the budget table is a **fail-closed policy** (`HelmClock` delta after a full evaluation). It is not a measured latency. Do not relax incompleteness to make numbers look better.
+
+Control Hub characterization remains blocked until a dated run records device, firmware, SDK, operator, and date.

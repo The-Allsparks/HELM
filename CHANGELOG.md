@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Compilable Phase 0 desktop example at `src/test/java/org/allsparks/helm/examples/Phase0DescribeExampleTest.java` (CI `check`; not an OpMode).
+- Desktop performance characterization: `ManualClock` records `evaluationNanos == 0`; the 5 ms budget is a clock-delta policy, not a Control Hub measurement.
 - Phase 0 vocabulary: goals, tasks, conditions, capabilities, resources, outcomes, and intent-tree structure.
 - Phase 1 passive observation of stated intent and outcomes.
 - Phase 2 offline/static plan validation.

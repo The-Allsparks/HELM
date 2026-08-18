@@ -1,6 +1,6 @@
 # HELM priority ledger
 
-Maintained by the repository orchestrator. Source: [initial deep audit](audits/initial-deep-audit.md). **`main`:** `b7a455a` after [#36](https://github.com/The-Allsparks/HELM/pull/36).
+Maintained by the repository orchestrator. Source: [initial deep audit](audits/initial-deep-audit.md). **`main`:** `66ca362` after [#39](https://github.com/The-Allsparks/HELM/pull/39).
 
 **Identity:** TA-C-GHill. **Max active subagents:** 1.
 
@@ -8,18 +8,17 @@ Maintained by the repository orchestrator. Source: [initial deep audit](audits/i
 
 | Field | Value |
 |-------|--------|
-| Selected issue | [#26](https://github.com/The-Allsparks/HELM/issues/26) CI-compiled example |
-| Branch | `fix/issue-26-compilable-example` |
+| Selected issue | [#25](https://github.com/The-Allsparks/HELM/issues/25) desktop characterization |
+| Branch | `fix/issue-25-desktop-characterization` |
 | Status | Implementation |
 
 ## Ledger (abbreviated)
 
 | Issue | Status |
 |-------|--------|
-| #17–#20, #22–#24, #6–#8 | Closed |
+| #17–#20, #22–#24, #26, #6–#8 | Closed |
 | #21 | Blocked — branch protection |
-| #25 | Ready — desktop characterization, no Control Hub claims |
-| #26 | In progress — CI-compiled example path |
+| #25 | In progress — desktop characterization, no Control Hub claims |
 | #9–#15 | Blocked — readiness gates |
 
 ## Required human decisions

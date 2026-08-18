@@ -1,6 +1,6 @@
 # HELM priority ledger
 
-Maintained by the repository orchestrator. Source: [initial deep audit](audits/initial-deep-audit.md). **`main`:** `a475ce3` after [#33](https://github.com/The-Allsparks/HELM/pull/33).
+Maintained by the repository orchestrator. Source: [initial deep audit](audits/initial-deep-audit.md). **`main`:** `b3b97e0` after [#34](https://github.com/The-Allsparks/HELM/pull/34).
 
 **Identity:** TA-C-GHill. **Max active subagents:** 1.
 
@@ -8,20 +8,21 @@ Maintained by the repository orchestrator. Source: [initial deep audit](audits/i
 
 | Field | Value |
 |-------|--------|
-| Selected issue | [#24](https://github.com/The-Allsparks/HELM/issues/24) future-dated snapshots |
-| Branch | `fix/issue-24-future-snapshots-not-fresh` |
+| Selected issue | [#23](https://github.com/The-Allsparks/HELM/issues/23) README completion |
+| Branch | `fix/issue-23-readme-completion` |
 | Status | Implementation |
 
 ## Ledger (abbreviated)
 
-| Issue | Status | PR |
-|-------|--------|-----|
-| #17–#20, #6–#8 | Closed | #27, #31, #32, #33 |
-| #24 | In progress | pending |
-| #23 | Ready | README completion |
-| #21 | Blocked | human branch protection |
-| #22 | Ready | do not merge Dependabot #4, #28–#30 |
-| #9–#15 | Blocked | readiness gates |
+| Issue | Status |
+|-------|--------|
+| #17–#20, #24, #6–#8 | Closed |
+| #23 | In progress |
+| #21 | Blocked — branch protection |
+| #22 | Ready — Dependabot analysis; do not merge #4, #28–#30 |
+| #25 | Ready — desktop characterization, no Control Hub claims |
+| #26 | Ready — CI-compiled example path |
+| #9–#15 | Blocked — readiness gates |
 
 ## Required human decisions
 

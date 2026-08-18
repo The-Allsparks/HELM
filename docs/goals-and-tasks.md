@@ -8,7 +8,7 @@ A **task** is a named action that may advance a goal. Tasks declare:
 - whether degraded capabilities are acceptable
 - required logical resources
 - per-dimension confidence requirements
-- preconditions, completion conditions, failure conditions
+- preconditions, completion conditions (required for Phase 2 validity), failure conditions
 - timeout (required for Phase 2 validity)
 - bounded retry policy
 - fallback task name (required for Phase 2 validity)

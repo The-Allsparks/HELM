@@ -65,6 +65,21 @@ public final class PoseEstimate {
         return Optional.of(Math.max(0L, nowNanos - timestampNanos));
     }
 
+    /**
+     * True when this pose timestamp is not in the future and not older than
+     * {@code maxAgeNanos}. Empty pose is the caller's problem: this object
+     * always has a timestamp.
+     */
+    public boolean isFresh(long nowNanos, long maxAgeNanos) {
+        if (maxAgeNanos < 0L) {
+            return false;
+        }
+        if (timestampNanos > nowNanos) {
+            return false;
+        }
+        return nowNanos - timestampNanos <= maxAgeNanos;
+    }
+
     public static final class Builder {
         private double xInches;
         private double yInches;

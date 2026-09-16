@@ -210,6 +210,14 @@ public final class WorldSnapshot {
         return nowNanos - timestampNanos <= maxAgeNanos;
     }
 
+    /**
+     * Teleop pose monitoring: missing pose is not fresh. HELM does not
+     * estimate pose; the application copies Pedro / Pinpoint into the snapshot.
+     */
+    public boolean poseIsFresh(long nowNanos, long maxAgeNanos) {
+        return pose.map(estimate -> estimate.isFresh(nowNanos, maxAgeNanos)).orElse(false);
+    }
+
     private static TimestampAlignment computeAlignment(WorldSnapshotBuilder builder) {
         List<Long> stamps = new ArrayList<>();
         stamps.add(builder.timestampNanos);

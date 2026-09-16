@@ -20,6 +20,7 @@ class DocLinkCheckerTest {
                 "docs/architecture.md",
                 "docs/responsibility-boundaries.md",
                 "docs/world-snapshot.md",
+                "docs/teleop-pose-monitoring.md",
                 "docs/goals-and-tasks.md",
                 "docs/intent-trees.md",
                 "docs/conditions-and-confidence.md",

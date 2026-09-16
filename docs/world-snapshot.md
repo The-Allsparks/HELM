@@ -6,7 +6,7 @@ HELM receives one immutable `WorldSnapshot` per decision cycle. It does not quer
 
 - Snapshot id (deterministic if omitted: `snapshot-{timestampNanos}`)
 - Decision timestamp (nanoseconds on `HelmClock`)
-- Optional pose with its own timestamp and position/heading confidence
+- Optional pose with its own timestamp and position/heading confidence. Missing pose fails `poseIsFresh` (teleop monitoring). HELM does not estimate pose.
 - Observed targets with separate classification and position confidence
 - Held-game-piece state that may be **unknown**, not silently empty
 - Capability states, resource availability, named conditions

@@ -131,6 +131,7 @@ HELM remains `OFF` unless the robot application sets a mode. Installing this lib
 | [Architecture](docs/architecture.md) | Four-layer model and package map |
 | [Responsibility boundaries](docs/responsibility-boundaries.md) | What HELM owns and does not own |
 | [World snapshot](docs/world-snapshot.md) | Immutable timestamped inputs |
+| [Teleop pose monitoring](docs/teleop-pose-monitoring.md) | Consume pose freshness; do not estimate pose |
 | [Goals and tasks](docs/goals-and-tasks.md) | Eligibility language |
 | [Intent trees](docs/intent-trees.md) | Inspectable behavior composition |
 | [Conditions and confidence](docs/conditions-and-confidence.md) | Unknown and stale are not booleans |

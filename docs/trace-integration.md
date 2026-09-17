@@ -1,6 +1,6 @@
 # TRACE integration
 
-TRACE is HELM's authoritative decision record. The TRACE GitHub repository was **empty** on 2026-08-17, so this scaffold defines the interface and ships `NoOpTraceSink` plus `RecordingTraceSink` for tests.
+TRACE is HELM's authoritative decision record. The TRACE GitHub repository was **empty** on 2026-08-17, so this scaffold defines the interface and ships `NoOpTraceSink` plus `RecordingTraceSink` for tests. HELM core has **no compile dependency** on TRACE; the contracts JAR is not TRACE.
 
 ## Evidence chain
 

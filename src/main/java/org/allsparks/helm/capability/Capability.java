@@ -1,10 +1,15 @@
 package org.allsparks.helm.capability;
 
 import java.util.Objects;
+import org.allsparks.contracts.identity.CapabilityId;
 
 /**
  * Semantic capability name. Well-known names are constants; season-specific
  * capabilities should be defined outside HELM core.
+ *
+ * <p>Students can name a custom capability with {@link #named(String)} without
+ * editing HELM or allsparks-contracts. {@link #toCapabilityId()} maps onto the
+ * shared identifier; this type is not deleted.
  */
 public final class Capability {
     public static final Capability DRIVE_TRANSLATION = named("DRIVE_TRANSLATION");
@@ -37,6 +42,14 @@ public final class Capability {
 
     public String name() {
         return name;
+    }
+
+    /**
+     * Shared {@link CapabilityId} for this name. Custom names are valid without
+     * changing HELM or the contracts repository.
+     */
+    public CapabilityId toCapabilityId() {
+        return CapabilityId.of(name);
     }
 
     @Override

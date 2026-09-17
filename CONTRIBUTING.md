@@ -19,7 +19,7 @@ The CI-compiled Phase 0 student example is `src/test/java/org/allsparks/helm/exa
 3. Distinguish **verified fact**, **engineering inference**, and **untested hypothesis** in documentation.
 4. Never describe an FRC, ROS, or BehaviorTree.CPP capability as a current FTC HELM capability without evidence.
 5. Do not commit secrets, Wi-Fi passwords, tokens, or student PII.
-6. Do not add compile dependencies on Pedro, NextFTC, FTCLib, Dairy, MIMIC, AMPER, BEACON, ViDAR, or TRACE in HELM core.
+6. Do not add compile dependencies on Pedro, NextFTC, FTCLib, Dairy, MIMIC, AMPER, BEACON, ViDAR, or TRACE in HELM core. `allsparks-contracts` is the allowed shared-envelope JAR.
 7. Keep season point values and field geometry out of `org.allsparks.helm`.
 
 ## Pull requests

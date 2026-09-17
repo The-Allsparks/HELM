@@ -16,7 +16,7 @@ Capability adapters          (Layer 4 — no-op only in this scaffold)
 Existing subsystem actions
 ```
 
-Core package: `org.allsparks.helm`. No compile dependency on ViDAR, Pedro, MIMIC, AMPER, BEACON, TRACE, Ivy, NextFTC, FTCLib, or Dairy.
+Core package: `org.allsparks.helm`. No compile dependency on ViDAR, Pedro, MIMIC, AMPER, BEACON, TRACE, Ivy, NextFTC, FTCLib, or Dairy. `allsparks-contracts` is the allowed shared-envelope dependency (`HelmClock` extends `MonotonicClock`; edge mappings in `org.allsparks.helm.contracts`). HELM remains independently adoptable.
 
 ## Layer 1 — World snapshot
 
@@ -52,7 +52,8 @@ Road Runner, NextFTC, FTCLib, and Dairy adapters are **not** implemented; they a
 | Package | Role |
 |---------|------|
 | `org.allsparks.helm` | Facade, config, mode, flags |
-| `clock` | Deterministic time |
+| `clock` | Deterministic time (`HelmClock` extends contracts `MonotonicClock`) |
+| `contracts` | Edge mappings onto `allsparks-contracts`. Does not delete HELM domain types |
 | `snapshot` | Immutable world view |
 | `goal` / `task` | Vocabulary and eligibility |
 | `condition` / `confidence` | Four-valued conditions |

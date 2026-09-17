@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Dependency on `org.allsparks:allsparks-contracts:0.1.0-rc.1`. `HelmClock` extends `MonotonicClock` (`nowNanos()` delegates to `nanoTime()`). `HelmMappings` converts `Capability` / `CapabilityAvailability` / HELM `Confidence` at the edge. `STALE` maps to `Validity.STALE` (freshness), not a fifth `Availability`. Local `HelmClock`, `Capability`, `CapabilityAvailability`, and HELM `Confidence` are not deleted. Sibling `includeBuild` is the zero-auth student path; CI reads GitHub Packages. Physical output remains disabled.
 - Compilable Phase 0 desktop example at `src/test/java/org/allsparks/helm/examples/Phase0DescribeExampleTest.java` (CI `check`; not an OpMode).
 - Desktop performance characterization: `ManualClock` records `evaluationNanos == 0`; the 5 ms budget is a clock-delta policy, not a Control Hub measurement.
 - Phase 0 vocabulary: goals, tasks, conditions, capabilities, resources, outcomes, and intent-tree structure.
@@ -33,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- README, architecture, and capabilities note the contracts pilot: HELM stays independently adoptable and does not depend on TRACE, AMPER, or MIMIC at compile time.
 - README Phase 0 student snippet includes a completion condition so it matches `PlanValidator`.
 - Dependabot ignores Gradle wrapper and JUnit BOM **major** upgrades so they stay on the Allsparks Gradle 8.7 / JUnit 5 convention.
 - CI pins `actions/checkout` v4.4.0 and `actions/setup-java` v4.9.1 by full commit SHA. Action major bumps are ignored.

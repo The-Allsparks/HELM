@@ -5,6 +5,9 @@ package org.allsparks.helm.capability;
  * diagnose the underlying hardware fault.
  *
  * <p>{@link #UNKNOWN} and {@link #STALE} must not be treated as available.
+ * Shared {@code Availability} has no {@code STALE} constant; map {@link #STALE}
+ * through freshness ({@code Validity.STALE}) at the contracts edge.
+ * {@link #mayBeUsed(boolean)} stays HELM policy on this local enum.
  */
 public enum CapabilityAvailability {
     AVAILABLE,

@@ -122,6 +122,8 @@ Phase 2 validation also requires a timeout, a fallback name, and a completion co
 
 HELM remains `OFF` unless the robot application sets a mode. Installing this library does nothing by itself.
 
+Students without GitHub Packages credentials should keep a sibling `allsparks-contracts` checkout. `settings.gradle` `includeBuild`s it when present.
+
 ---
 
 ## Documentation
@@ -151,6 +153,12 @@ HELM remains `OFF` unless the robot application sets a mode. Installing this lib
 | [Ecosystem review](docs/research/ecosystem-review.md) | Source-backed FTC/FRC research |
 | [Build vs adopt](docs/research/build-vs-adopt.md) | Why HELM is a small independent core |
 | [ADRs](docs/adr/README.md) | Architecture decisions |
+
+---
+
+## Relationship to Allsparks projects
+
+HELM depends on [`allsparks-contracts`](https://github.com/The-Allsparks/allsparks-contracts) `0.1.0-rc.1` for shared envelopes. HELM stays independently adoptable: that JAR does not pull in TRACE, AMPER, or MIMIC. `HelmClock` extends `MonotonicClock` (`nowNanos()` delegates to `nanoTime()`). `Capability`, `CapabilityAvailability`, and HELM `Confidence` are unchanged in this pilot; mappings live in `org.allsparks.helm.contracts.HelmMappings`. `CapabilityAvailability.STALE` maps to `Validity.STALE` (freshness), not a fifth `Availability`. Physical output stays disabled.
 
 ---
 

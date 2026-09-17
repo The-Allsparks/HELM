@@ -14,3 +14,5 @@ HELM does **not** convert:
 - low confidence → absent
 
 Tasks declare **named** confidence dimensions (`position`, `heading`, `target-classification`, `target-position`, `possession`, `mechanism-state`, `time-estimate`, `capability-health`). There is no single global robot-confidence number. Unknown samples fail a numeric threshold rather than counting as 0.
+
+HELM `Confidence` (`unknown()` / `of([0, 1])`) remains the local type. `HelmMappings` round-trips it to the shared contracts `Confidence` envelope.
